@@ -47,5 +47,19 @@ let resultado = input.map(sqrtint)
 
 let teste = input.map{$0 * $0}
 
-print(resultado)
-print(teste)
+//print(resultado)
+//print(teste)
+
+func guardy() -> Int? {
+    return nil
+}
+
+var x: Int?
+
+func aff(){
+    guard let name = guardy() else {
+        return
+    }
+    print("oi")
+    print(name)
+}

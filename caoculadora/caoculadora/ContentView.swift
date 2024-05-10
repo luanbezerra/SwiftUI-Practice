@@ -13,6 +13,8 @@ struct ContentView: View {
     @State var years: Int?
     @State var months: Int?
     @State var result: Int?
+    let portes = ["Pequeno", "Médio", "Grande"]
+    @State var porteSelecionado = "Pequeno"
     
     var body: some View {
             
@@ -42,6 +44,13 @@ struct ContentView: View {
             .keyboardType(.numberPad)
             .padding()
             
+            Picker("Portes", selection: $porteSelecionado){
+                ForEach(portes, id:\.self) {porte in
+                    Text(porte)
+                }
+            }
+            .pickerStyle(.segmented)
+            
             if let result {
                 Text("Seu cachorro tem, em idade humana...")
                     .padding()
@@ -54,14 +63,12 @@ struct ContentView: View {
                     .frame(maxHeight: 150)
                     .frame(maxWidth: .infinity)
                     .padding()
+                    .shadow(radius: 5)
             }
             
-            Button(action: {
-                result = 23
-            })
-            {
-                Text("Calculá")
-            }
+            Spacer()
+            
+            Button("Calcular", action: processYears)
             .padding()
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
             .frame(height: 50)
@@ -71,6 +78,35 @@ struct ContentView: View {
             
         }
         .padding()
+    }
+    
+    func processYears(){
+        print("cãocular")
+        
+        guard let years, let months else {
+            print("deu ruim, vida")
+            return
+        }
+        
+        if months < 0 && years < 0 {
+            print("pelo menos um campo deve ser maior que zero")
+            return
+        }
+        
+        let multiplicador: Int
+        
+        switch porteSelecionado {
+        case "Pequeno":
+            multiplicador = 6
+        case "Médio":
+            multiplicador = 7
+        case "Grande":
+            multiplicador = 8
+        default:
+            multiplicador = 0
+        }
+        
+        result = (years * multiplicador) + (months * multiplicador) / 12
     }
 }
 
