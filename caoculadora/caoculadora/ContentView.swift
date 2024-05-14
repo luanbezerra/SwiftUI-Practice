@@ -7,25 +7,20 @@
 
 import SwiftUI
 
-enum CBLPhase: String, CaseIterable {
-    case engage
-    case investigate
-    case act
-}
-
 struct ContentView: View {
-    
-    @State var phase = CBLPhase.engage
-    
+        
     @State var years: Int?
     @State var months: Int?
     @State var result: Int?
+    @State var size = Size.small
+    @State var empty: Bool = false
+    @State var negative: Bool = false
     
-    @State var size = Porte.small
-    @State var colorr: Color = .green
+    let emptyMsg = "Preencha pelo menos um campo para calcular"
+    let negativeMsg = "A idade não pode ser negativa"
     
     var body: some View {
-         
+        
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -33,8 +28,8 @@ struct ContentView: View {
                     Text("Qual a idade do seu cão?")
                         .font(.header5)
                         .foregroundColor(.indigo600)
-                        .padding(.top, 23)
-                        .padding(.bottom, 29)
+                        .padding(.top, 20)
+                        .padding(.bottom, 30)
                     
                     VStack(alignment: .leading, spacing: 8){
                         Text("Anos")
@@ -46,14 +41,6 @@ struct ContentView: View {
                             format: .number
                         )
                     }
-                    
-//                    ZStack{
-//                        Color(colorr)
-//                        Button("Mudar de cor", action: {
-//                            colorr = .pink
-//                        })
-//                        .animation(.easeIn, value: colorr)
-//                    }
                     
                     VStack(alignment: .leading, spacing: 8){
                         Text("Meses")
@@ -72,29 +59,30 @@ struct ContentView: View {
                             .foregroundColor(.indigo600)
                         
                         Picker("Portes", selection: $size){
-                            ForEach(Porte.allCases, id:\.self) {size in
+                            ForEach(Size.allCases, id:\.self) {size in
                                 Text(size.rawValue)
                             }
                         }
                         .pickerStyle(.segmented)
                     }
                     
-//                    Divider()
-//                        .background(.indigo600)
-                                    
                     if let result {
                         Text("Seu cachorro tem, em idade humana...")
                             .foregroundColor(.indigo600)
                             .frame(maxWidth: .infinity)
                             .font(.body1)
-                            .padding(.bottom, 45)
-
+                    
+                        Spacer()
+                        
                         Text("\(result) anos")
                             .foregroundColor(.indigo600)
                             .frame(maxWidth: .infinity)
                             .font(.display)
+                            .contentTransition(.numericText())
+                        
                     } else {
                         Spacer()
+                        
                         Image(ImageResource.clarinha2)
                             .resizable()
                             .scaledToFit()
@@ -106,17 +94,27 @@ struct ContentView: View {
                     Spacer()
                     
                     Button("Calcular", action: processYears)
-                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                    .frame(height: 50)
-                    .background(Color.indigo600)
-                    .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .font(.body1)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(Color.indigo600)
+                        .foregroundColor(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                     
                 }
                 .textFieldStyle(.roundedBorder)
                 .keyboardType(.numberPad)
+                .bold()
                 .padding()
-            .containerRelativeFrame(.vertical)
+                .containerRelativeFrame(.vertical)
+                .animation(.easeInOut, value: result)
+                .alert(emptyMsg, isPresented: $empty){
+                    Button("OK", role: .cancel, action: {})
+                }
+                .alert(negativeMsg, isPresented: $negative){
+                    Button("OK", role: .cancel, action: {})
+                }
+                
             }
             .navigationTitle("Cãoculadora")
             .scrollDismissesKeyboard(.immediately)
@@ -143,12 +141,12 @@ extension ContentView {
         }
         
         guard let years, let months else {
-            print("deu ruim, vida")
+            self.empty = true
             return
         }
         
-        if months < 0 && years < 0 {
-            print("pelo menos um campo deve ser maior que zero")
+        if months < 0 || years < 0 {
+            self.negative = true
             return
         }
         

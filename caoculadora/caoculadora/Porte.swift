@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Porte: String, CaseIterable {
+enum Size: String, CaseIterable {
     case small = "Pequeno"
     case medium = "Médio"
     case big = "Grande"
