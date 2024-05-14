@@ -109,18 +109,8 @@ struct ContentView: View {
             return
         }
         
-        let multiplier: Int
+        result = size.calculateAge(of: years, and: months)
         
-        switch size {
-        case .small:
-            multiplier = 6
-        case .medium:
-            multiplier = 7
-        case .big:
-            multiplier = 8
-        }
-        
-        result = (years * multiplier) + (months * multiplier) / 12
     }
 }
 
