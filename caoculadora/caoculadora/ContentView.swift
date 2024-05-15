@@ -74,11 +74,20 @@ struct ContentView: View {
                     
                         Spacer()
                         
-                        Text("\(result) anos")
-                            .foregroundColor(.indigo600)
-                            .frame(maxWidth: .infinity)
-                            .font(.display)
-                            .contentTransition(.numericText())
+                        if(result == 1){
+                            Text("\(result) ano")
+                                .foregroundColor(.indigo600)
+                                .frame(maxWidth: .infinity)
+                                .font(.display)
+                                .contentTransition(.numericText())
+                        }
+                        else{
+                            Text("\(result) anos")
+                                .foregroundColor(.indigo600)
+                                .frame(maxWidth: .infinity)
+                                .font(.display)
+                                .contentTransition(.numericText())
+                        }
                         
                     } else {
                         Spacer()
@@ -93,13 +102,16 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    Button("Calcular", action: processYears)
-                        .font(.body1)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(Color.indigo600)
-                        .foregroundColor(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    Button(action: processYears) {
+                        Text("Cãocular")
+                         .frame(height: 50)
+                         .frame(maxWidth: .infinity)
+                         .frame(alignment: .bottom)
+                         .background(.indigo600)
+                         .clipShape(.rect(cornerRadius: 10))
+                         .foregroundStyle(.white)
+                         .font(.body1)
+                    }
                     
                 }
                 .textFieldStyle(.roundedBorder)
